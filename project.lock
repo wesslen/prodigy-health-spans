@@ -1,0 +1,51 @@
+ner-data-to-spacy:
+  cmd: python -m spacy run ner-data-to-spacy
+  script:
+    - python3.9 -m prodigy data-to-spacy --ner ner-correct-med7 --base-model en_core_med7_lg
+      ./corpus
+  deps: []
+  outs: []
+  spacy_version: 3.5.2
+  spacy_git_version: aea4a96f9
+evaluate:
+  cmd: python -m spacy run evaluate
+  script:
+    - python3.9 -m spacy evaluate training/model-best corpus/dev.spacy --output training/metrics.json
+  deps:
+    - path: corpus/dev.spacy
+      md5: 504ea0bcc138616421fc684823ec4332
+    - path: training/model-best
+      md5: 121b835e373b435cf0586ffb1e9c08ad
+  outs:
+    - path: training/metrics.json
+      md5: 809709e2949223dc794ee74151a2dbad
+  spacy_version: 3.5.3
+  spacy_git_version: '512241e12'
+package:
+  cmd: python -m spacy run package
+  script:
+    - python3 -m spacy package training/model-best packages --name ner_med7_improved
+      --version 0.0.0 --force
+  deps:
+    - path: training/model-best
+      md5: 121b835e373b435cf0586ffb1e9c08ad
+  outs:
+    - path: packages/en_ner_med7_improved-0.0.0/dist/en_ner_med7_improved-0.0.0.tar.gz
+      md5: a78fc9b909c7d0b25c8d361e85fafbca
+  spacy_version: 3.5.3
+  spacy_git_version: '512241e12'
+train:
+  cmd: python -m spacy run train
+  script:
+    - python3.9 -m spacy train corpus/config.cfg --output training/ --paths.train
+      corpus/train.spacy --paths.dev corpus/dev.spacy --paths.vectors en_core_med7_lg
+  deps:
+    - path: corpus/train.spacy
+      md5: 850a92498f6517502e00a90b1f7e33e2
+    - path: corpus/dev.spacy
+      md5: 504ea0bcc138616421fc684823ec4332
+  outs:
+    - path: training/model-best
+      md5: f5126212a8774500c3517d678828d5e3
+  spacy_version: 3.5.2
+  spacy_git_version: aea4a96f9
