@@ -162,3 +162,5 @@ cython_debug/
 corpus
 training
 packages
+dev
+venv-pt
