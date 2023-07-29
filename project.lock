@@ -49,3 +49,20 @@ train:
       md5: f5126212a8774500c3517d678828d5e3
   spacy_version: 3.5.2
   spacy_git_version: aea4a96f9
+version:
+  cmd: python -m spacy run version
+  script:
+    - ptc --version
+  deps: []
+  outs: []
+  spacy_version: 3.5.4
+  spacy_git_version: 7a2833bf2
+create-pt-project:
+  cmd: python -m spacy run create-pt-project
+  script:
+    - ptc projects create ner_med7_finetuned "NER/spancat Prodigy Teams workflow with
+      med7 model"
+  deps: []
+  outs: []
+  spacy_version: 3.4.4
+  spacy_git_version: 77833bfef
